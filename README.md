@@ -42,13 +42,13 @@ All runs use a 50×50 lattice. Yellow and purple represent the two spin states.
 
 ### T = 1 — Cold (ordered)
 
-![Ising model at T=1](Figure_1.png)
+![Ising model at T=1](figures/Figure_1.png)
 
 Almost the whole grid turns one colour. The spins have all lined up with their neighbours. When it's cold enough, spins agree with the ones around them and the entire grid falls into line. This is the orderedstate. The single odd dot is just one spin briefly knocked out of place; even a cold grid has a tiny bit of jitter.
 
 ### T = 0.1 — Frozen too fast (stuck)
 
-![Ising model at T=0.1](Figure_2.png)
+![Ising model at T=0.1](figures/Figure_2.png)
 
 Strangely, going *colder* makes the order *worse*, not better. Cooled this fast, the grid freezes almost instantly into whatever messy pattern it happened to be in, and gets stuck with two big blocks that can't merge. There isn't enough heat left to let the border between them move, so it never reaches the clean single-colour state it "should" end up in.
 
@@ -56,7 +56,7 @@ It's like metalwork: cool metal slowly and you get a clean crystal; cool it too 
 
 ### T = 5 — Hot (disordered)
 
-![Ising model at T=5](Figure_3.png)
+![Ising model at T=5](figures/Figure_3.png)
 
 The order is gone. You still get little clumps forming and breaking apart, neighbours still tug on each other a bit, but no single colour ever takes over. This is the **disordered** state or paramagnetic phase: it's so hot that the random jostling beats the spins' urge to line up.
 
