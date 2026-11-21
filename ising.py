@@ -151,5 +151,69 @@ def sweep(T):
 #1 Sweep gives every single spin on grid a chance to flip
 for step in range(100):
     sweep(5) #T below 2.27 is cold, above 2.27 is hot
-plt.imshow(grid)
-plt.show() # Shows our grid froze to ice at T =1 
+#plt.imshow(grid)
+#plt.show() # Shows our grid froze to ice at T =1 
+
+
+"""
+Generate labelled datasets, build a classifier
+"""
+"""
+
+X = []
+y = []
+n_samples = 100  #Test in small amounts first, scale up once it works
+ 
+for i in range(n_samples):
+    #cold grids
+
+    grid = np.random.choice(a=[-1,1], size=(50,50))
+    t = np.random.random() * 1.0 + 1.0 #random cold temp in between, between [1.0, 2.0); range [a,b] : random() * (b-a) + a
+    for step in range(500):
+        sweep(t)
+    X.append(grid)
+    y.append(0) #for each run we save one 0 = ordered 
+
+for i in range(n_samples):
+
+    #hot grids
+
+    grid = np.random.choice(a=[-1,1], size=(50,50))
+    t = np.random.random() * 1.4 + 2.6 #random hot temperature between [2.6-4.0)
+    for step in range(500):
+        sweep(t)
+    X.append(grid)
+    y.append(1) #unordered, hot grids, labelled 1
+
+"""
+#print(len(X))
+#print(len(y))
+
+#Save the first 200 datasets
+#np.save('X.npy', np.array(X))
+#np.save('y.npy', np.array(y))
+
+
+#Save 1000 grids 
+#np.save('X_1000.npy', np.array(X))
+#np.save('y_1000.npy', np.array(y))
+
+#Now we want to test what does the model do with the questions it was never shown?
+#So we generate datasets, consists of grids that are swept on different temperatures
+#There are 10 grids per temperature, swept from temp 1.0-4.0, and we feed the Neural network we built previously
+
+X_sweep = []
+temps = []
+grids_per_temp = 10
+
+for t in np.arange(1.0,4.0,0.15):
+    for i in range(grids_per_temp):
+        grid = np.random.choice(a=[-1,1], size=(50,50))
+        for step in range(100):
+            sweep(t)
+        X_sweep.append(grid.copy())
+        temps.append(t)
+
+print(len(X_sweep))
+np.save("X_sweep.npy", np.array(X_sweep))
+np.save("temps.npy", np.array(temps))
