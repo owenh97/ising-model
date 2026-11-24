@@ -4,10 +4,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 
-X = np.load('X.npy')
-y = np.load('y.npy')
+X = np.load('X_1000.npy')
+y = np.load('y_1000.npy')
 
-X_flat = X.reshape(200,-1) # reshape lets logistic reg read 2d grids by making grids lines of numbers
+X_flat = X.reshape(len(X),-1) # reshape lets logistic reg read 2d grids by making grids lines of numbers
 
 X_train, X_test, y_train, y_test = train_test_split(
     X_flat, y, test_size=0.2, random_state=0
@@ -49,7 +49,7 @@ Conclusion :
 #Implement Neural network, 200 datasets
 #What's different? |x| = ReLU(x) + ReLU(-x); RELU(-x) keeps the negative side flipped up
 
-nn = MLPClassifier(hidden_layer_sizes=(16,), alpha=1, max_iter=1000, random_state=0) #one hidden layer with 16 neurons
+nn = MLPClassifier(hidden_layer_sizes=(16,), alpha=10, max_iter=1000, random_state=0) #one hidden layer with 16 neurons
 nn.fit(X_train, y_train)
 print("neural net:", nn.score(X_test, y_test))
 
@@ -64,18 +64,23 @@ print("nn TEST:", nn.score(X_test, y_test)) #Output (without alpha): test is 0.7
 #When alpha=1, nn TEST = 0.8
 #When alpha=10, nn TEST = 0.975
 
-#L2 Penalty worked
+#L2 Penalty improved the test results
 
 #Now let's test larger datasets
 #For 1000 datasets
-#When alpha=0.0001, nn TEST = 0.825
-#When alpha=1, nn TEST = 0.875
-#When alpha=10, nn TEST = 1.0
+#When alpha=0.0001, nn TEST = 0.82
+#When alpha=1, nn TEST = 0.915
+#When alpha=10, nn TEST = 0.975
 
 #With a big enough dataset, the model clearly learned to tell cold grids from clearly hot ones.
-#As it could tell the magnetisation gap was enormous (0.71 vs 0.047)
+#The dataset is learnable because the two phases are genuinely different
+#|magnetisation| ~0.71 (ordered) vs ~0.047 (disordered) on the 200-set
+
+#Now the 1000-set isn't just bigger, it's an easier dataset, its ordered grids are more sharply ordered
+#|mag| (0.849 vs 0.714). Size and difficulty moved together, so "more data heped" is not clearly proven.
 
 #Now let's test what does the model do with the questions it was never shown?
+#We will probe the frozen model on temperatures it never trained on, including the "warm" temperature.
 #Load the 10 grids at each temperature from 1.0 to 4.0. Feed it to the Neural network model to gauge results
 
 X_sweep = np.load("X_sweep.npy")

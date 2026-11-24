@@ -158,11 +158,11 @@ for step in range(100):
 """
 Generate labelled datasets, build a classifier
 """
-"""
+
 
 X = []
 y = []
-n_samples = 100  #Test in small amounts first, scale up once it works
+n_samples = 500  #Test in small amounts first, scale up once it works
  
 for i in range(n_samples):
     #cold grids
@@ -185,7 +185,7 @@ for i in range(n_samples):
     X.append(grid)
     y.append(1) #unordered, hot grids, labelled 1
 
-"""
+
 #print(len(X))
 #print(len(y))
 
@@ -195,13 +195,13 @@ for i in range(n_samples):
 
 
 #Save 1000 grids 
-#np.save('X_1000.npy', np.array(X))
-#np.save('y_1000.npy', np.array(y))
+np.save('X_1000.npy', np.array(X))
+np.save('y_1000.npy', np.array(y))
 
 #Now we want to test what does the model do with the questions it was never shown?
 #So we generate datasets, consists of grids that are swept on different temperatures
 #There are 10 grids per temperature, swept from temp 1.0-4.0, and we feed the Neural network we built previously
-
+"""
 X_sweep = []
 temps = []
 grids_per_temp = 10
@@ -217,3 +217,4 @@ for t in np.arange(1.0,4.0,0.15):
 print(len(X_sweep))
 np.save("X_sweep.npy", np.array(X_sweep))
 np.save("temps.npy", np.array(temps))
+"""
