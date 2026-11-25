@@ -116,4 +116,46 @@ plt.axvline(2.27, linestyle='--', color='red')
 plt.xlabel('Temperature')
 plt.ylabel('Fraction classified disordered')
 plt.title('CNN phase transition detection')
+#plt.show()
+
+#Visualisation of the CNN in action (kernel)
+
+filters = model.conv.weight.detach().numpy()  
+#print(filters.shape)
+
+fig, axes = plt.subplots(1,8, figsize=(12,2))
+for k in range(8):
+    axes[k].imshow(filters[k,0], cmap='RdBu')
+    axes[k].set_title(f'filter {k}')
+    axes[k].axis('off')
+#plt.show()
+
+#We see all the kernels that have different patterns
+#a red square = "I want a +1 spin here", vice versa
+#Lay filter over and over, perform dot product.
+#If dot product is a big number = match
+#If dot product is small = mismatch
+
+
+
+grid_in = X_t[y_t == 1][0:1] #one disordered grid
+
+with torch.no_grad():
+    fmaps = model.conv(grid_in)[0].numpy() #(8,50,50) - one map per filter
+
+print(fmaps.shape)
+
+fig, axes = plt.subplots(1,9, figsize=(18,2))
+axes[0].imshow(grid_in[0,0],cmap='gray')
+axes[0].set_title('input')
+axes[0].axis('off')
+
+for k in range(8):
+    axes[k+1].imshow(fmaps[k])
+    axes[k+1].set_title(f'f{k}')
+    axes[k+1].axis('off')
+
 plt.show()
+#We can see, for both ordered and unordered grid, 8 kernels slide through
+#Each kernel reocgnises the features, so each produces its own map
+#The combining happens at the "Linear" step, where everything gets combined to a final verdict

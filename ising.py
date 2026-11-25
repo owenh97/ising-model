@@ -159,7 +159,7 @@ for step in range(100):
 Generate labelled datasets, build a classifier
 """
 
-
+"""
 X = []
 y = []
 n_samples = 500  #Test in small amounts first, scale up once it works
@@ -201,7 +201,7 @@ np.save('y_1000.npy', np.array(y))
 #Now we want to test what does the model do with the questions it was never shown?
 #So we generate datasets, consists of grids that are swept on different temperatures
 #There are 10 grids per temperature, swept from temp 1.0-4.0, and we feed the Neural network we built previously
-"""
+
 X_sweep = []
 temps = []
 grids_per_temp = 10
