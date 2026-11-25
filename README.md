@@ -30,7 +30,7 @@ Aligned with its neighbourhood → low energy; clashing → high energy.
 - If `ΔE > 0`, the flip costs energy → **accept it only with probability**
   `p = exp(-ΔE / T)`, by drawing a random number and comparing.
 
-That probabilistic acceptance is where temperature enters. Hot (`T` large) → costly flips happen often → chaos. Cold (`T` small) → costly flips almost neverhappen → the system freezes into order.
+That probabilistic acceptance is where temperature enters. Hot (`T` large) → costly flips happen often → chaos. Cold (`T` small) → costly flips almost never happen → the system freezes into order.
 
 **Sweeps.** One *sweep* applies the flip decision to every cell once. The system is evolved by repeating sweeps many times, letting order (or disorder) spread across the lattice.
 
@@ -44,7 +44,7 @@ All runs use a 50×50 lattice. Yellow and purple represent the two spin states.
 
 *Figure 1 : Ising model at T=1 (Cold & Ordered)*
 
-Almost the whole grid turns one colour. The spins have all lined up with their neighbours. When it's cold enough, spins agree with the ones around them and the entire grid falls into line. This is the orderedstate. The single odd dot is just one spin briefly knocked out of place; even a cold grid has a tiny bit of jitter.
+Almost the whole grid turns one colour. The spins have all lined up with their neighbours. When it's cold enough, spins agree with the ones around them and the entire grid falls into line. This is the ordered state. The single odd dot is just one spin briefly knocked out of place; even a cold grid has a tiny bit of jitter.
 
 ### T = 0.1 — Frozen too fast (stuck)
 
@@ -96,13 +96,13 @@ The second half of the project asks a harder question: can a machine learn to te
 
 ![Phase transition detected by the model](figures/phase_transition.png)
 
-*Figure 4 : Phase transition (crtical temperature T ≈ 2.27) detected by dense neural networks*
+*Figure 4 : Phase transition (critical temperature T ≈ 2.27) detected by dense neural networks*
 
 The curve stays flat at zero through the ordered phase, then lifts off right at *T ≈ 2.27* — the true critical temperature (red dashed line). The model was never given this number, and never saw a single grid from the transition region, yet it locates the phase boundary on its own. This reproduces the central idea of Carrasquilla & Melko, *Nature Physics* (2017).
 
 How sharp this curve looks depends mostly on regularisation. The plot above uses strong regularisation (α=10). The same model with weak regularisation produces a jagged curve from the identical ~10 grids per temperature and the same architecture. So regularisation, not just sample count or network type, is the main lever on how cleanly the transition shows up. (More grids per temperature and a CNN sharpen it further.)
 
-The exact curve also shifts a little from run to run. It reflects this particular model's opinion, so it wobbles with the training data and the random split. What stays fixed across every version is the liftoff near T ≈ 2.27; that physics characteristic is the exact thing the model learned, despite not being told the the boundary was around 2.27. The liftoff is reproducible, hence reliable.
+The exact curve also shifts a little from run to run. It reflects this particular model's opinion, so it wobbles with the training data and the random split. What stays fixed across every version is the liftoff near T ≈ 2.27; that physics characteristic is the exact thing the model learned, despite not being told the boundary was around 2.27. The liftoff is reproducible, hence reliable.
 
 Run the classifier (after generating the dataset with ising.py):
 
@@ -114,7 +114,7 @@ python classifier.py
 
 The dense network works, but it has two weaknesses: it flattens each grid into a list of 2500 numbers, throwing away which spins are neighbours, and with ~40,000 weights it overfits unless regularised.
 
-A **convolutional network** fixes both. Instead of flattening, it slides small tiny pattern-detectors (filters) across the grid, that scan local neighbourhoods, exactly the local spin-alignment that defines order. And because the same filter is reussed across the whole grid (weight sharing), the entire feature extractor is a few hundred parameters instead of tens of thousands, so it generalises without regularisation at all.
+A **convolutional network** fixes both. Instead of flattening, it slides small pattern-detectors (filters) across the grid, that scan local neighbourhoods, exactly the local spin-alignment that defines order. And because the same filter is reused across the whole grid (weight sharing), the entire feature extractor is a few hundred parameters instead of tens of thousands, so it generalises without regularisation at all.
 
 The result:
 
@@ -171,7 +171,7 @@ This is an independent confirmation: the pure-physics T꜀ and the machine-learn
 
 ## Performance : Vectorised Simulation
 
-The original simulation loops over every cell in Python, is correct, but slow. The vectorised version (ising_fast.py) runs the same Metropolis dynamics as whole-array NumPy operations: neighbour sums via np.roll, and a checkerboard update (flip all "black" cells at once, then all "white") so no two neighbouring spins ever flip in the same step. Same physics, ~100× faster, which is what makes the finite-size scaling above feasible.
+The original simulation loops over every cell in Python, is correct, but slow. The vectorised version (ising_vectorised.py) runs the same Metropolis dynamics as whole-array NumPy operations: neighbour sums via np.roll, and a checkerboard update (flip all "black" cells at once, then all "white") so no two neighbouring spins ever flip in the same step. Same physics, ~100× faster, which is what makes the finite-size scaling above feasible.
 
 ## Roadmap
 
